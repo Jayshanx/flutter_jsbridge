@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>jssdkTest</title>
+    <script type="text/javascript" src="jssdk.js"></script>
+    <script>
+
+        //获取用户信息
+        function getUserInfoCallback() {
+            JSSDK.getUserInfo({
+                success: function (res) {
+                    document.getElementById("user_info_callback").innerHTML = "用户信息(回调):" + JSON.stringify(res);
+                }
+            });
+        }
+
+        //获取用户信息(Promise)
+        function getUserInfo() {
+            JSSDK.getUserInfo({}).then(function (res) {
+                document.getElementById("user_info").innerHTML = "用户信息(Promise) :" + JSON.stringify(res);
+            });
+        }
+
+        //跳转登录
+        function login() {
+            JSSDK.login({});
+        }
+
+        //监听网络变化
+        function onNetworkStatusChange() {
+            JSSDK.onNetworkStatusChange((res) => {
+                document.getElementById("network_status").innerHTML = "网络状态 : " + JSON.stringify(res);
+            });
+        }
+    </script>
+</head>
+
+<body>
+<div>
+    <span id="user_info_callback">用户信息(回调) : </span><br><br>
+    <span id="user_info">用户信息(Promise) : </span><br><br>
+    <span id="network_status">监听网络状态: </span><br><br>
+    <br>
+    <button style="margin-top: 20px" onclick="getUserInfoCallback()">获取用户信息(回调)</button>
+    <br>
+    <button style="margin-top: 20px" onclick="getUserInfo()">获取用户信息(promise)</button>
+    <br>
+    <button style="margin-top: 20px" onclick="login()">跳转登录页面</button>
+    <br>
+    <button style="margin-top: 20px" onclick="onNetworkStatusChange()">监听网络变化</button>
+    <br>
+</div>
+</body>
+
+</html>
