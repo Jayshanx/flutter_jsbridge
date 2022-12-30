@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 import '../common/mixin.dart';
@@ -18,7 +17,7 @@ class InAppWebViewBridgeDispatcher with WebViewContextProvider {
   late InAppWebViewController _webController;
 
   @override
-  final WebViewContextStateMixin<StatefulWidget> webContext;
+  final WebViewContextStateMixin webContext;
 
   InAppWebViewBridgeDispatcher._(this.webContext);
 
@@ -57,9 +56,8 @@ class InAppWebViewBridgeDispatcher with WebViewContextProvider {
     _webController.evaluateJavascript(source: script);
   }
 
-
   @override
-  void dispose(){
+  void dispose() {
     listenerHandler.dispose(this);
     functionHandler.dispose(this);
   }

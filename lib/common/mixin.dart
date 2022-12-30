@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show BuildContext, StatefulWidget, State;
 
 ///
 ///一些跟ui有关的方法可以放在这里

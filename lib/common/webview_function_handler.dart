@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jsbridge_demo/inapp_webview/inapp_webview_bridge_dispatcher.dart';
 
 import '../login_page.dart';
 import 'mixin.dart';
