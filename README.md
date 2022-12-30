@@ -1,4 +1,4 @@
-# flutter wenview jsbridge
+# flutter webview jsbridge
 
 flutter webview js端与flutter端的交互
 
@@ -7,7 +7,7 @@ flutter webview js端与flutter端的交互
 
 如果只想支持官方插件 `webview_flutter` , 那么只需要删除 `lib/inapp_webview` 整个目录的代码
 
-暂不支持发布到pub.dev, 测试网页在 `assets/index.html`
+暂不支持发布到pub.dev, 也许后期会
 
 #### Feat
 
@@ -21,6 +21,8 @@ flutter webview js端与flutter端的交互
 
 #### Example
 
+`assets/index.html`
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -30,7 +32,7 @@ flutter webview js端与flutter端的交互
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>jssdkTest</title>
-    //重点在这里，如果你自己定制化需要添加一些方法到jssd.js,
+    //重点在这里，如果你自己定制化需要添加一些方法到jssdk.js,
     <script type="text/javascript" src="jssdk.js"></script>
     <script>
 
