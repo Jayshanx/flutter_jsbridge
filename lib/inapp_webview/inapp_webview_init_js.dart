@@ -25,7 +25,7 @@ var inAppWebViewInitJs = '''
                                 }
                             }).catch(err => reject({
                                 errCode: -1,
-                                errMsg: 'please running at tongfun app'
+                                errMsg: 'please running at app'
                             }))
                         })
                     } else {
@@ -44,13 +44,13 @@ var inAppWebViewInitJs = '''
                         return new Promise(function (resolve, reject) {
                             reject({
                                 errCode: -1,
-                                errMsg: 'please running at tongfun app'
+                                errMsg: 'please running at app'
                             })
                         })
                     } else {
                         fail && fail({
                             errCode: -1,
-                            errMsg: 'please running at tongfun app'
+                            errMsg: 'please running at app'
                         })
                     }
                 }
@@ -63,7 +63,7 @@ var inAppWebViewInitJs = '''
                     return new Promise(function (resolve, reject) {
                         reject({
                             errCode: -1,
-                            errMsg: 'please running at tongfun app'
+                            errMsg: 'please running at app'
                         })
                     })
                 } else {

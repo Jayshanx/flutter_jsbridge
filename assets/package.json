@@ -1,0 +1,19 @@
+{
+  "name": "jssdk",
+  "version": "1.0.0",
+  "description": "jssdk",
+  "main": "jssdk.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "jayshanx",
+  "license": "ISC",
+  "devDependencies": {
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
