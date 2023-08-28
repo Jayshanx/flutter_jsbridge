@@ -9,7 +9,8 @@
         'getUserInfo',
         'login',
         'setAppbar',
-        'stopNetworkStatusChange'
+        'stopNetworkStatusChange',
+        'uploadFile'
     ];
 
     // 监听方法列表

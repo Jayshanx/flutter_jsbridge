@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../common/mixin.dart';
@@ -43,7 +44,7 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
 
   /// 处理javascript的调用函数
   void onMessageReceived(JavaScriptMessage javaScriptMessage) async {
-    print("javaScriptMessage======${javaScriptMessage.message}");
+    debugPrint("javaScriptMessage======${javaScriptMessage.message}");
     var request = RequestProtocol.parseJson(javaScriptMessage.message);
     var type = request.type;
     var method = request.method;
@@ -68,19 +69,16 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
 
       try {
         R response = await func.call(this, request.params);
-        var res = ResponseProtocol.fromRequest(request, response.data).encode;
-
-        print("res=======$res");
-        if (response.code == 0) {
-          evaluateJavascript("jsBridge.successResponseFromFlutter($res)");
-        } else {
-          evaluateJavascript("jsBridge.failResponseFromFlutter($res)");
-        }
+        var res = ResponseProtocol.fromRequest(request, response).encode;
+        evaluateJavascript("jsBridge.responseFromFlutter($res)");
       } catch (e) {
-        var res = ResponseProtocol.fromRequest(request, {
-          'err': e.toString(),
-        }).encode;
-        evaluateJavascript("jsBridge.failResponseFromFlutter($res)");
+        var res = ResponseProtocol.fromRequest(
+          request,
+          R.fail(
+            message: e.toString(),
+          ),
+        ).encode;
+        evaluateJavascript("jsBridge.responseFromFlutter($res)");
       }
     }
   }
