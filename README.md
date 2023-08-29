@@ -1,18 +1,13 @@
 # flutter webview jsbridge
 
-flutter webview js端与flutter端的交互
+flutter webview js端与flutter端的交互, 本库只是example演示，如果自己使用请复制代码
 
-目前 flutter 相关的 jsbridge 也有很多,  本库也参考了许多前辈的写法，并且自己做了一些封装, 提供了一些其他库没有的方法,
-也有一些自己的封装思路, 如果读者有其他的想法和建议，欢迎交流
-
-如果只想支持官方插件 `webview_flutter` , 那么只需要删除 `lib/inapp_webview` 整个目录的代码
-
-暂不支持发布到pub.dev, 也许后期会
+如果只想支持官方插件 `webview_flutter` , 那么只需要删除 `lib/inapp_webview` 整个目录的代码, 反之亦然
 
 #### Feat
 
  - `flutter 3.3.10`
- - 支持 `flutter_inappwebview: ^6.0.0-beta.22` 和 `webview_flutter: ^4.0.1`
+ - 支持 `flutter_inappwebview: ^6.0.0-beta.24+1` 和 `webview_flutter: ^4.2.2`
  - `context`,`mounted`上下文感知
  - 支持 `回调` 和 `promise` 写法
  - 支持 `js` 监听 `flutter` 方法
