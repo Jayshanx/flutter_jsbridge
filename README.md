@@ -6,7 +6,7 @@ flutter webview js端与flutter端的交互, 本库只是example演示，如果�
 
 #### Feat
 
- - `flutter 3.3.10`
+ - `flutter 3.13.1`
  - 支持 `flutter_inappwebview: ^6.0.0-beta.24+1` 和 `webview_flutter: ^4.2.2`
  - `context`,`mounted`上下文感知
  - 支持 `回调` 和 `promise` 写法
