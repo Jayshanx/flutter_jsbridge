@@ -18,6 +18,12 @@
         'onNetworkStatusChange'
     ];
 
+    // 待Dart端调用的方法
+    var JS_SDK_DART_CALL = [
+        'getJsInfo'
+    ]
+
+
     var _isFunction = function (obj) {
         return typeof obj == 'function' || false;
     }
@@ -79,6 +85,18 @@
                         })
                     }
                 });
+            });
+
+            ///注册Dart端调用方法
+            JS_SDK_DART_CALL.forEach(function (name) {
+                JSSDK[name] = function (callback) {
+                    root.jsBridge.registerFuncForJs(name, (param, responseCall)=>{
+                        if (_isFunction(callback)) {
+                            var res = callback(param)
+                            responseCall(name, res)
+                        }
+                    })
+                };
             });
         }
     }

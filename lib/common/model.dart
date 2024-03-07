@@ -99,11 +99,10 @@ class RequestProtocol {
   }
 
   factory RequestProtocol.parseJson(String jsonString) {
-    RequestProtocol protocol = RequestProtocol.fromMap(
-      jsonDecode(jsonString),
-    );
-    return protocol;
+    return RequestProtocol.fromMap(jsonDecode(jsonString));
   }
+
+  String get encode => jsonEncode(this);
 }
 
 /// flutter 返回 model
@@ -111,11 +110,13 @@ class ResponseProtocol {
   Map<String, dynamic> data;
   int code;
   String? callbackId;
+  String? message;
 
   ResponseProtocol({
     this.data = const {},
     this.code = 0,
     this.callbackId,
+    this.message,
   });
 
   factory ResponseProtocol.fromRequest(RequestProtocol request, R r) {
@@ -123,6 +124,7 @@ class ResponseProtocol {
       data: r.data,
       code: r.code,
       callbackId: request.callbackId,
+      message: r.message,
     );
   }
 
@@ -130,7 +132,7 @@ class ResponseProtocol {
 
   @override
   String toString() {
-    return "{code: $code, data: $data, callbackId: $callbackId}";
+    return "{code: $code, data: $data, callbackId: $callbackId,message: $message}";
   }
 
   /// jsonEncode方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
@@ -138,5 +140,6 @@ class ResponseProtocol {
         'data': data,
         'code': code,
         'callbackId': callbackId,
+        'message': message,
       };
 }

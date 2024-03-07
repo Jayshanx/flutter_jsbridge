@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../common/mixin.dart';
 import '../common/model.dart';
+import '../common/webview_call_js_handler.dart';
 import '../common/webview_function_handler.dart';
 import '../common/webview_listener_handler.dart';
 
@@ -11,10 +12,12 @@ import '../common/webview_listener_handler.dart';
 ///
 class WebViewBridgeDispatcher with WebViewContextProvider {
   ///监听方法
-  WebViewListenHandler get listenerHandler => WebViewListenHandler.of(this);
+  WebViewListenHandler get _listenerHandler => WebViewListenHandler.of(this);
 
   ///普通方法
-  WebViewFunctionHandler get functionHandler => WebViewFunctionHandler.of(this);
+  WebViewFunctionHandler get _functionHandler => WebViewFunctionHandler.of(this);
+
+  WebViewCallJsHandler get jsClient => WebViewCallJsHandler.of(this);
 
   @override
   final WebViewContextStateMixin webContext;
@@ -33,8 +36,8 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
 
   @override
   void dispose() {
-    listenerHandler.dispose(this);
-    functionHandler.dispose(this);
+    _listenerHandler.dispose(this);
+    _functionHandler.dispose(this);
   }
 
   @override
@@ -50,7 +53,7 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
     var method = request.method;
     if (type == 'listen') {
       //监听方法
-      var listenFun = listenerHandler.listenFunctions[method];
+      var listenFun = _listenerHandler.listenFunctions[method];
       if (listenFun == null) {
         return;
       }
@@ -59,8 +62,8 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
     } else if (type == 'normal') {
       //普通方法
       WebViewNormalFunction? func = {
-        ...functionHandler.normalFunctions,
-        ...listenerHandler.listenStateFunctions,
+        ..._functionHandler.normalFunctions,
+        ..._listenerHandler.listenStateFunctions,
       }[method];
 
       if (func == null) {
@@ -80,6 +83,8 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
         ).encode;
         evaluateJavascript("jsBridge.responseFromFlutter($res)");
       }
+    } else if (type == 'response') {
+      jsClient.handleCallBack(this, request);
     }
   }
 }

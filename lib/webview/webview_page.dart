@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:jsbridge_demo/common/mixin.dart' show WebViewContextStateMixin;
 import 'package:webview_flutter/webview_flutter.dart';
@@ -72,6 +74,17 @@ class WebViewPageState extends State<WebViewPage> with WebViewContextStateMixin<
     webViewDispatcher.dispose();
   }
 
+  void onTestCallJsFunction() {
+    webViewDispatcher.jsClient.getJsInfo({'number': Random().nextInt(1000)}).then((value) {
+      print("js返回的数据=======${value}");
+    });
+
+    //以上写法等价于
+    // webViewDispatcher.jsClient.callJsFunc('getJsInfo', {'status': '12312'}).then((value) {
+    //   print("js返回的数据=======${value}");
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +92,9 @@ class WebViewPageState extends State<WebViewPage> with WebViewContextStateMixin<
       appBar: showAppbar
           ? AppBar(
               title: const Text('官方插件 webview_flutter'),
+              actions: [
+                TextButton(onPressed: onTestCallJsFunction, child: Text('调用js端')),
+              ],
             )
           : null,
       body: WebViewWidget(

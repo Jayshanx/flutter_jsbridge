@@ -15,6 +15,13 @@
     </style>
     <script>
 
+        window.onload = function() {
+            JSSDK.getJsInfo((param)=>{
+                document.getElementById("flutter_call_info").innerHTML = "接收flutter端传递的参数:<br>" + JSON.stringify(param);
+                return {'returnNumber': Math.floor(Math.random() * 2000)};
+            })
+        };
+
         //获取用户信息
         function getUserInfoCallback() {
             JSSDK.getUserInfo({
@@ -69,6 +76,9 @@
 
 <body>
 <div style="display:flex; flex-direction: column">
+    <br>
+    <span id="flutter_call_info">接收flutter端传递的参数 : </span><br><br>
+
     <br>
     <button style="margin-top: 20px" onclick="getUserInfoCallback()">获取用户信息(回调)</button>
     <span id="user_info_callback">用户信息(回调) : </span><br><br>

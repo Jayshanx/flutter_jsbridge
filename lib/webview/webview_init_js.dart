@@ -18,8 +18,55 @@ var webViewInitJs = '''
 
     var _kCallbackId = 0;
     var kResponseCallMap = {};
+    
+    // funcs of javascript registered for native
+    var kRegisterJsFuncMap = {};
+    
+    //[Js] register js func for Flutter call
+    function registerFuncForJs(funcName, func) {
+        kRegisterJsFuncMap[funcName] = func;
+    }
+    
+    //[Dart] flutter call js func
+    function callJsFuncFromFlutter(funcName, msg) {
+        console.log(`callJsFuncFromFlutter = \${JSON.stringify(msg)}`);
+        var responseCall = null;
+        var registerJsFunc = kRegisterJsFuncMap[funcName];
+           
+        responseCall = function (_thisFuncName, responseData) {
+            sendResponseToFlutter(_thisFuncName, responseData);
+        }
+                
+        if (registerJsFunc) {
+            try {
+                registerJsFunc(msg.params, responseCall);
+            } catch (exception) {
+                console.log("call registerJsFunc error");
+                if (typeof console != 'undefined') {
+                    console.log(`jsBridge: callJsFuncFromFlutter \${funcName} failed >>` + exception);
+                }
+            }
+        } else {
+          console.log(`jsBridge: callJsFuncFromFlutter \${funcName} not register`);
+        }
+    }
+    
+    //[Js] flutter -> js -> 【flutter】js response data to flutter
+    function sendResponseToFlutter(funcName, response) {
+        try {
+            FlutterBridge.postMessage(
+                JSON.stringify({
+                    type: 'response',
+                    params: response,
+                    method: funcName
+                })
+            );
+        } catch (e) {
+            return;
+        }
+    }
 
-    // js call Flutter func
+    //[Js] js call Flutter func
     function callFlutterFunc(funcName, params, success, fail) {
         if (!funcName) {
             return;
@@ -101,7 +148,7 @@ var webViewInitJs = '''
         }
     }
 
-    // flutter fail response to js
+    //[Dart] flutter response to js
     function responseFromFlutter(msg) {
         let callbackId = msg.callbackId;
         let code = msg.code;
@@ -132,6 +179,9 @@ var webViewInitJs = '''
     var jsBridge = window.jsBridge = {
         callFlutterFunc: callFlutterFunc,
         responseFromFlutter: responseFromFlutter,
+        sendResponseToFlutter: sendResponseToFlutter,
+        callJsFuncFromFlutter: callJsFuncFromFlutter,
+        registerFuncForJs: registerFuncForJs
     };
 
     let UploadTask = () => {
