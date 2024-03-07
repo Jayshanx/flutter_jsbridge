@@ -101,7 +101,9 @@
         }
     }
 
-    JSSDK.register();
-    JSSDK.VERSION = '0.0.1';
-    window.JSSDK = JSSDK;
+    window.addEventListener('JSBridgeEvents', function(e){
+       JSSDK.register();
+       JSSDK.VERSION = '0.0.1';
+       window.JSSDK = JSSDK;
+     }, false)
 })()

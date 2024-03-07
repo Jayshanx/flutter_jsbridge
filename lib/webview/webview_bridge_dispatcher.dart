@@ -48,7 +48,7 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
   /// 处理javascript的调用函数
   void onMessageReceived(JavaScriptMessage javaScriptMessage) async {
     debugPrint("javaScriptMessage======${javaScriptMessage.message}");
-    var request = RequestProtocol.parseJson(javaScriptMessage.message);
+    var request = ProtocolPayload.parseJson(javaScriptMessage.message);
     var type = request.type;
     var method = request.method;
     if (type == 'listen') {
@@ -71,11 +71,11 @@ class WebViewBridgeDispatcher with WebViewContextProvider {
       }
 
       try {
-        R response = await func.call(this, request.params);
-        var res = ResponseProtocol.fromRequest(request, response).encode;
+        R response = await func.call(this, request.data);
+        var res = ProtocolPayload.fromRequest(request, response).encode;
         evaluateJavascript("jsBridge.responseFromFlutter($res)");
       } catch (e) {
-        var res = ResponseProtocol.fromRequest(
+        var res = ProtocolPayload.fromRequest(
           request,
           R.fail(
             message: e.toString(),

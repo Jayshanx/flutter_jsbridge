@@ -39,7 +39,7 @@ var webViewInitJs = '''
                 
         if (registerJsFunc) {
             try {
-                registerJsFunc(msg.params, responseCall);
+                registerJsFunc(msg.data, responseCall);
             } catch (exception) {
                 console.log("call registerJsFunc error");
                 if (typeof console != 'undefined') {
@@ -48,6 +48,15 @@ var webViewInitJs = '''
             }
         } else {
           console.log(`jsBridge: callJsFuncFromFlutter \${funcName} not register`);
+          FlutterBridge.postMessage(
+                JSON.stringify({
+                    type: 'response',
+                    data: null,
+                    method: funcName,
+                    code: -1,
+                    message: `\${funcName} not register`
+                })
+            );
         }
     }
     
@@ -57,12 +66,21 @@ var webViewInitJs = '''
             FlutterBridge.postMessage(
                 JSON.stringify({
                     type: 'response',
-                    params: response,
-                    method: funcName
+                    data: response,
+                    method: funcName,
+                    code: 0
                 })
             );
         } catch (e) {
-            return;
+            FlutterBridge.postMessage(
+                JSON.stringify({
+                    type: 'response',
+                    data: null,
+                    method: funcName,
+                    code: -1,
+                    message: e
+                })
+            );
         }
     }
 
@@ -88,7 +106,7 @@ var webViewInitJs = '''
                     JSON.stringify({
                         type: _kNormal,
                         method: funcName,
-                        params: params,
+                        data: params,
                         callbackId: `\${_kCallbackId}`,
                     })
                 );
@@ -114,7 +132,7 @@ var webViewInitJs = '''
                 JSON.stringify({
                     type: _kNormal,
                     method: funcName,
-                    params: params,
+                    data: params,
                     callbackId: `\${_kCallbackId}`,
                 })
             );
@@ -193,7 +211,7 @@ var webViewInitJs = '''
                     JSON.stringify({
                         type: _kNormal,
                         method: 'cancelUploadFile',
-                        params: {
+                        data: {
                             'kUploadTaskId': this.taskId
                         },
                         callbackId: '',
@@ -238,7 +256,7 @@ var webViewInitJs = '''
             JSON.stringify({
                 type: _kListen,
                 method: key,
-                params: {}
+                data: {}
             })
         );
 
@@ -259,9 +277,8 @@ var webViewInitJs = '''
     }
 
     var doc = document;
-    var readyEvent = doc.createEvent('Events');
-    readyEvent.initEvent('jsBridgeReady');
+    const readyEvent = new CustomEvent("JSBridgeEvents");
     readyEvent.bridge = jsBridge;
-    doc.dispatchEvent(readyEvent);
+    window.dispatchEvent(readyEvent);
 })();
 ''';

@@ -55,91 +55,63 @@ class R {
       };
 }
 
-///js 请求model
-class RequestProtocol {
-  String type;
+class ProtocolPayload {
+  final Map<String, dynamic> data;
+  final int code;
+  final String? callbackId;
+  final String? message;
+  final String? type;
+  final String? method;
 
-  /// 方法名
-  String method;
-
-  /// 参数 string map
-  Map<String, dynamic> params;
-
-  String? callbackId;
-
-  RequestProtocol({
-    required this.type,
-    required this.method,
-    this.params = const {},
-    this.callbackId,
-  });
-
-  /// jsonEncode方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'method': method,
-        'params': params,
-        'callbackId': callbackId,
-      };
-
-  /// jsonDecode(jsonStr)方法返回的是Map<String, dynamic>类型，需要这里将map转换成实体类
-  factory RequestProtocol.fromMap(Map<String, dynamic> json) {
-    RequestProtocol jsonModel = RequestProtocol(
-      type: json['type'] as String,
-      method: json['method'] as String,
-      params: (json['params'] ?? {}).cast<String, dynamic>(),
-      callbackId: json['callbackId'] as String?,
-    );
-    return jsonModel;
-  }
-
-  @override
-  String toString() {
-    return "{type: $type,method: $method, params: $params, callbackId: $callbackId}";
-  }
-
-  factory RequestProtocol.parseJson(String jsonString) {
-    return RequestProtocol.fromMap(jsonDecode(jsonString));
-  }
-
-  String get encode => jsonEncode(this);
-}
-
-/// flutter 返回 model
-class ResponseProtocol {
-  Map<String, dynamic> data;
-  int code;
-  String? callbackId;
-  String? message;
-
-  ResponseProtocol({
+  ProtocolPayload({
     this.data = const {},
     this.code = 0,
     this.callbackId,
     this.message,
+    this.method,
+    this.type,
   });
 
-  factory ResponseProtocol.fromRequest(RequestProtocol request, R r) {
-    return ResponseProtocol(
+  String get encode => jsonEncode(this);
+
+  factory ProtocolPayload.parseJson(String jsonString) {
+    return ProtocolPayload.fromMap(jsonDecode(jsonString));
+  }
+
+  factory ProtocolPayload.fromMap(Map<String, dynamic> json) {
+    ProtocolPayload jsonModel = ProtocolPayload(
+      type: json['type'] as String?,
+      method: json['method'] as String,
+      data: (json['data'] ?? {}).cast<String, dynamic>(),
+      callbackId: json['callbackId'] as String?,
+      code: (json['code'] as int?) ?? 0,
+      message: json['message'],
+    );
+    return jsonModel;
+  }
+
+  factory ProtocolPayload.fromRequest(ProtocolPayload request, R r) {
+    return ProtocolPayload(
       data: r.data,
       code: r.code,
       callbackId: request.callbackId,
       message: r.message,
+      type: request.type,
+      method: request.method,
     );
   }
 
-  String get encode => jsonEncode(this);
-
   @override
   String toString() {
-    return "{code: $code, data: $data, callbackId: $callbackId,message: $message}";
+    return "{code: $code, data: $data, callbackId: $callbackId,message: $message,method:$method,type:$type}";
   }
 
-  /// jsonEncode方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
   Map<String, dynamic> toJson() => {
         'data': data,
         'code': code,
         'callbackId': callbackId,
         'message': message,
+        'method': method,
+        'type': type,
       };
 }

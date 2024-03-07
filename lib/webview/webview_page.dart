@@ -77,6 +77,8 @@ class WebViewPageState extends State<WebViewPage> with WebViewContextStateMixin<
   void onTestCallJsFunction() {
     webViewDispatcher.jsClient.getJsInfo({'number': Random().nextInt(1000)}).then((value) {
       print("js返回的数据=======${value}");
+    }).catchError((e){
+      print("调用方法错误===$e");
     });
 
     //以上写法等价于

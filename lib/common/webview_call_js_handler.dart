@@ -14,20 +14,24 @@ class WebViewCallJsHandler {
     return WebViewCallJsHandler._(client);
   }
 
-  void handleCallBack(WebViewContextProvider client, RequestProtocol requestProtocol) {
-    var key = '${requestProtocol.method}_${client.hashCode}';
+  void handleCallBack(WebViewContextProvider client, ProtocolPayload payload) {
+    var key = '${payload.method}_${client.hashCode}';
     var completer = _callBackIdCompleterMap[key];
     if (completer != null) {
-      completer.complete(requestProtocol.params);
+      if (payload.code == 0) {
+        completer.complete(payload.data);
+      } else {
+        completer.completeError(payload.message ?? '');
+      }
       _callBackIdCompleterMap.remove(key);
     }
   }
 
   Future<Map<String, dynamic>?> _evaluateJavascript(String functionName, Map<String, dynamic> params) async {
     final Completer<Map<String, dynamic>?> completer = Completer<Map<String, dynamic>?>();
-    var requestProtocol = RequestProtocol(
+    var requestProtocol = ProtocolPayload(
       method: functionName,
-      params: params,
+      data: params,
       type: '',
     ).encode;
     _client.evaluateJavascript('jsBridge.callJsFuncFromFlutter("$functionName",$requestProtocol)');
