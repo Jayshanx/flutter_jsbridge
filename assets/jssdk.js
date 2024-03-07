@@ -102,8 +102,6 @@
     }
 
     JSSDK.VERSION = '0.0.1';
+    JSSDK.register();
     window.JSSDK = JSSDK;
-    window.addEventListener('JSBridgeEvents', function(e){
-       JSSDK.register();
-     }, false)
 })()
